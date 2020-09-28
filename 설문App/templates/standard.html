@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>DT임원평가 설문App</title>
+  <script type="text/javascript" src="{{url_for('static', filename='js/excel.min.js')}}"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{url_for('static', filename='css/mdb.min.css')}}" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="{{url_for('static', filename='css/style.min.css')}}" rel="stylesheet">
+  <!-- 나눔 바른 고딕 웹 폰트 적용하기 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type="text/css">
+
+    html,
+    body,
+    header,
+    .carousel {
+      height: 100%;
+    }
+
+    .wrap{
+     width: 1000px;
+     height: 330px;
+     overflow-x: scroll;
+     white-space:nowrap
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #1C2331!important;
+            }
+        }
+
+    .hangul {
+        font-family: 'Nanum Barun Gothic' !important;
+    }
+
+    li {float:left; list-style:none; margin:1px;}
+
+    a:link { color: white; text-decoration: none;}
+    a:visited { color: white; text-decoration: none;}
+    a:hover { color: white; text-decoration: none;}
+</style>
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+        <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="/" target="_blank">
+            <strong class="hangul" style="color: #61dafb; font-weight: bold;">'20년 DT전략과제 수행 결과 발표회 (1차)</strong>
+        </a>
+
+        <!-- Collapse -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/standard">평가기준</a>
+                </li>
+            </ul>
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons">
+            <li class="nav-item">
+                <a href="https://github.com/pym7857/"
+                    target="_blank" style="color: #61dafb; font-weight:bold; font-size:150%">
+                    LS ELECTRIC
+                </a>
+            </li>
+            </ul>
+        </div>
+        <!-- Links -->
+        </div>
+    </nav>
+    <!-- Navbar -->
+
+  <!--Main layout-->
+    <main>
+        <div class="container" style="width: 1000px; height: 85vh;">
+
+            <br><br><br><br><br>
+
+            <img src="{{url_for('static', filename='img/standard.PNG')}}" alt="">
+
+        </div>
+    </main>
+
+    <!--Footer-->
+    <footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+        <!--Copyright-->
+        <div class="footer-copyright py-3">
+        <br>
+        © 2020 Copyright:
+        <a href="https://github.com/pym7857/" target="_blank" style="color: #61dafb; font-weight:bold;"> 
+            박영민 (DT 추진단)
+            <br>
+            ympark2@lselectric.co.kr
+            <br>
+            <br>
+        </a>
+        <br>
+        <br>
+        </div>
+        <!--/.Copyright-->
+
+    </footer>
+</body>

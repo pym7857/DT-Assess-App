@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>DT임원평가 설문App</title>
+  <script type="text/javascript" src="{{url_for('static', filename='js/excel.min.js')}}"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{url_for('static', filename='css/mdb.min.css')}}" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="{{url_for('static', filename='css/style.min.css')}}" rel="stylesheet">
+  <!-- 나눔 바른 고딕 웹 폰트 적용하기 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type="text/css">
+
+    html,
+    body,
+    header,
+    .carousel {
+      height: 100%;
+    }
+
+    h3 {
+      display: inline;
+    }
+
+    .container {
+      margin-left: 600px;
+      margin-right: 300px;
+    }
+
+    .wrap{
+     width: 1000px;
+     height: 330px;
+     overflow-x: scroll;
+     white-space:nowrap
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #1C2331!important;
+            }
+        }
+
+    .hangul {
+        font-family: 'Nanum Barun Gothic' !important;
+    }
+
+    li {float:left; list-style:none; margin:1px;}
+
+    /* skillsInfo*/
+    #skillsInfoArea {
+      margin: 0 auto;
+      width: 86%;
+      max-width: 1280px;
+      border-radius: 40px;
+      padding: 50px;
+    }
+    #skillsArea {
+      width: 50%;
+      float: left;
+      margin-right: 5%;
+    }
+    #infoArea {
+      width: 44%;
+      display: inline-block;
+    }
+    #infoArea tr {
+      height: 30px;
+    }
+    .skillProgressBarBG {
+      background: #ddd;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .skillProgressBar {
+      height: 10px;
+    }
+
+  </style>
+   <script type="text/javascript">
+	  var FnObj = {
+				bodyScrollEvt: function(evt) {
+					this.scrollSkillsGraph.process();
+				},
+				scrollSkillsGraph: {
+					isFirst: true,
+					process: function() {
+						if (this.isFirst) {
+							var valueArr = [];
+							$('#skillsInfoArea').find('.skillProgressBar').each(function() {
+								valueArr.push([this, $(this).width()/$(this).parent().width()]);
+								$(this).css('width', '1px');
+							});
+							for (let i = 0; i < valueArr.length; i++) {
+								setTimeout(function() {
+									$(valueArr[i][0]).css('transition', 'width 1s ease 0.7s');
+									$(valueArr[i][0]).css('width', Math.round(valueArr[i][1]*100)+'%');
+								}, 100*(i+1));
+							}
+							this.isFirst = false;
+						}
+					}
+				}
+	  }
+  </script>
+  <script type="text/javascript">
+    
+  </script>
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      <!-- Brand -->
+      <a class="navbar-brand" href="/" target="_blank">
+        <strong class="hangul" style="color: #61dafb; font-weight: bold;">'20년 DT전략과제 수행 결과 발표회 (1차)</strong>
+      </a>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/standard" target="_blank">평가기준</a>
+          </li>
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item">
+            <a href="https://github.com/pym7857/"
+              target="_blank" style="color: #61dafb; font-weight:bold; font-size:150%">
+              LS ELECTRIC
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Links -->
+    </div>
+  </nav>
+  <!-- Navbar -->
+
+
+  <!--Main layout-->
+  <main>
+    
+    <div class="container" style="height: 85vh;">
+
+        <br><br><br><br><br>
+
+        <!--Grid row-->
+        <div class="row">
+          <!--Grid column-->
+          <div class="col-md-8">
+            {% if err_msg %}
+              <p style="color: red;">{{ err_msg }}</p>
+            {% endif %}
+
+            <br>
+
+            <!-- Main heading -->
+            <h3 class="h3 mb-3" style="font-family: 'Nanum Barun Gothic'">
+              DT 전략과제 평가 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            </h3>
+            {% if who %} 
+            <i style="font-size:20px; text-align:center;" class="fa fa-user"></i> 평가자 조직장: {{ who }}
+            {% endif %}
+
+              <hr>
+
+              <form action="/" method="post">
+
+                <div style="width:30%; float:left;" >
+                  <div class="form-group">
+                    <input type="button" style="width: 190px; height: 50px; background-color: #252b34; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn1" name="whoami"  value="권봉현 전무                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn2" name="whoami" value="김동현 전무                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn3" name="whoami" value="서장철 담당(DP)                >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn4" name="whoami" value="김영근 상무                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn5" name="whoami" value="이건욱 상무                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn6" name="whoami" value="조욱동 이사                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn7" name="whoami" value="김정옥 이사                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn8" name="whoami" value="김준길 이사                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn9" name="whoami" value="김유종 이사                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn10" name="whoami" value="채대석 이사                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn11" name="whoami" value="박경록 담당                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn12" name="whoami" value="서장철 담당(DT)                >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn13" name="whoami" value="신용학 담당                          >">
+                    <br>
+                    <input type="button" style="width: 190px; height: 50px; background-color: #003876; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: center; border: 1px solid white; cursor:pointer;" id="final_btn" value="최종 제출">
+                  </div>
+                </div>
+
+                <br>
+
+                <div style="width:70%; float:left;">
+                    <div class="form-group" id="temp_board">
+                      <img style="width:90%" src="{{url_for("static", filename="img/logo.PNG")}}" alt="">
+                    </div>
+
+                    <br><br>
+
+                    <div class="form-group">
+                      <button style="font-family: 'Nanum Barun Gothic' !important; cursor:pointer;" id="submit_btn"
+                        type="submit" class="btn btn-primary btn-md pull-right">저장
+                      </button>
+                    </div>
+                </div>
+              </form>
+
+          </div>
+          <!--Grid column-->
+
+
+          <!--Grid column-->
+          <div class="col-md-4">
+            <!-- SkiilsInfoArea -->
+              <div id="skillsInfoArea" class="contentArticle">
+                <div id="skillsArea">
+                  {% if sdict %}
+                    {% for key, value in sdict.items() %}
+                      <b>{{ key }}</b>
+                      <div class="skillProgressBarBG">
+                        <div class="skillProgressBar" style="background: black; width: {{ value }}%;"></div>
+                      </div>
+                      <div>{{ value }}</div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+          </div>
+          <!--Grid column-->
+
+
+
+      <hr class="my-5">
+
+
+    </div>
+
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      <br>
+      © 2020 Copyright:
+      <a href="https://github.com/pym7857/" target="_blank" style="color: #61dafb; font-weight:bold;"> 
+        박영민 (DT 추진단)
+        <br>
+        ympark2@lselectric.co.kr
+        <br>
+        <br>
+      </a>
+      <br>
+      <br>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+  <!-- JQuery Modal -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/jquery.modal.min.js')}}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/mdb.min.js')}}"></script>
+  <!-- Initializations -->
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+  </script>
+
+  <script type="text/javascript"> 
+    window.onload = function() { 
+      FnObj.bodyScrollEvt(this);
+
+      var final_btn = document.getElementById('final_btn');
+      final_btn.onclick = function() {
+        if (confirm("정말 제출 하시겠습니까?") == true){    //확인
+            //document.form.submit();
+            window.location.href='/end';
+        }else{   //취소
+            return;
+        }
+      }
+      
+      var temp_btn1 = document.getElementById('temp_btn1');
+      var temp_btn2 = document.getElementById('temp_btn2');
+      var temp_btn3 = document.getElementById('temp_btn3');
+      var temp_btn4 = document.getElementById('temp_btn4');
+      var temp_btn5 = document.getElementById('temp_btn5');
+      var temp_btn6 = document.getElementById('temp_btn6');
+      var temp_btn7 = document.getElementById('temp_btn7');
+      var temp_btn8 = document.getElementById('temp_btn8');
+      var temp_btn9 = document.getElementById('temp_btn9');
+      var temp_btn10 = document.getElementById('temp_btn10');
+      var temp_btn11 = document.getElementById('temp_btn11');
+      var temp_btn12 = document.getElementById('temp_btn12');
+      var temp_btn13 = document.getElementById('temp_btn13');
+
+      var submit_btn = document.getElementById('submit_btn');
+
+      temp_btn1.onclick = function() { 
+
+        temp_btn1.style.backgroundColor = "#fdd56a" // 노랑
+        temp_btn1.style.color = 'black'
+        temp_btn1.style.border = '1px solid white';  // click 시 black outline 제거
+        temp_btn1.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>전력/자동화(E&A)사업본부</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color: #003876;">조직장</td>' + 
+          '<td>권봉현 전무</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>Digital 비즈니스 모델 발굴</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>선규근 실장, 이준경S, 이찬수S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h1_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h1_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      }
+
+      temp_btn2.onclick = function() { 
+
+        temp_btn2.style.backgroundColor = "#fdd56a"
+        temp_btn2.style.color = 'black'
+        temp_btn2.style.border = '1px solid white';
+        temp_btn2.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>재경부문</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김동현 전무</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>DT Tool 활용을 통한 원가 Process 재정의</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>노희택S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h2_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h2_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn3.onclick = function() { 
+
+        temp_btn3.style.backgroundColor = "#fdd56a"
+        temp_btn3.style.color = 'black'
+        temp_btn3.style.border = '1px solid white';
+        temp_btn3.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>DP연구소</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>서장철 담당(DP)</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1. [데이터 분석] 최신 Machine Learning 기법을 자사 제품에 빠르게 적용하기 위하여  유관 부서간 긴밀한 협조와 소통 및 선진 전문업체와의 적극적인 Open Innovation 추진 <br> 2. [Digital 제품] Core Platform기반으로 Device Service SW 경쟁력 확보</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>이진호 담당, 성영주S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h3_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h3_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn4.onclick = function() { 
+
+        temp_btn4.style.backgroundColor = "#fdd56a"
+        temp_btn4.style.color = 'black'
+        temp_btn4.style.border = '1px solid white';
+        temp_btn4.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>연구개발본부</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김영근 상무</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.DDRM (Data Driven R&D Management Step I) <br> 2.,Digital 제품/기술 체계적 확보 <br> 3.데이터 분석 기법 자사 제품 적용</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>이상훈S, 박상래S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h4_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h4_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn5.onclick = function() { 
+
+        temp_btn5.style.backgroundColor = "#fdd56a"
+        temp_btn5.style.color = 'black'
+        temp_btn5.style.border = '1px solid white';
+        temp_btn5.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>전략기획부문</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>이건욱 상무</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>DT 관련 신규 사업개발  (Microgrid, 전기설비 안전강화 솔루션, Cyber Security)</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>임일형S, 이정각M</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h5_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h5_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn6.onclick = function() { 
+
+        temp_btn6.style.backgroundColor = "#fdd56a"
+        temp_btn6.style.color = 'black'
+        temp_btn6.style.border = '1px solid white';
+        temp_btn6.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>생기/소재연구센터</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>조욱동 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.Smart Factory 단계별추진 <br> 2.Digital Technology 적용 공정혁신</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>백희선S, 김민규S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h6_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h6_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h6_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn7.onclick = function() { 
+
+        temp_btn7.style.backgroundColor = "#fdd56a"
+        temp_btn7.style.color = 'black'
+        temp_btn7.style.border = '1px solid white';
+        temp_btn7.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>청주사업장1공장</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김정옥 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.Smart Factory 단계별 추진 <br> 2.IoT 정보기반 모델교체 자동화로 낭비시간 개선 </td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>허종배S, 황복하S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h7_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h7_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h7_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn8.onclick = function() { 
+
+        temp_btn8.style.backgroundColor = "#fdd56a"
+        temp_btn8.style.color = 'black'
+        temp_btn8.style.border = '1px solid white';
+        temp_btn8.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>품질/동반성장부문</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김준길 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>MES 사내 시험대 합∙부 데이터의 LQC 지표화</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>윤관노S, 김기복S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h8_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h8_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h8_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn9.onclick = function() { 
+
+        temp_btn9.style.backgroundColor = "#fdd56a"
+        temp_btn9.style.color = 'black'
+        temp_btn9.style.border = '1px solid white';
+        temp_btn9.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>글로벌인사/경영지원부문</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김유종 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.DT리더육성 교육체계 수립 <br> 2.‘20년 전사 DT프로젝트 실무자 교육</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>박상태S, 이기호S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h9_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h9_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h9_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn10.onclick = function() { 
+
+        temp_btn10.style.backgroundColor = "#fdd56a"
+        temp_btn10.style.color = 'black'
+        temp_btn10.style.border = '1px solid white';
+        temp_btn10.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>비전실</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>채대석 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.Data 통합 관리체계 수립 <br> 2.Data Lake 1차 Pilot 구축</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>신봉수S, 강성훈M</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h10_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h10_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h10_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn11.onclick = function() { 
+
+        temp_btn11.style.backgroundColor = "#fdd56a"
+        temp_btn11.style.color = 'black'
+        temp_btn11.style.border = '1px solid white';
+        temp_btn11.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>천안사업장</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>박경록 담당</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.M/L기반 FCST 시스템 적용 일정 <br> 2.인버터 조립시간 절감</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>정환S, 나성규S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h11_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h11_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h11_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn12.onclick = function() { 
+
+        temp_btn12.style.backgroundColor = "#fdd56a"
+        temp_btn12.style.color = 'black'
+        temp_btn12.style.border = '1px solid white';
+        temp_btn12.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>DT추진단</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>서장철 담당(DT)</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.DT 사무국 활동 <br> 2.DT Enabler 활동(성과관리, Infra, 리더) <br> 3.디지털 경영 추진</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>송동호S, 곽형운M</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h12_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h12_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h12_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn13.style.backgroundColor = "#252b34"
+        temp_btn13.style.color = 'white'
+      } 
+
+      temp_btn13.onclick = function() { 
+
+        temp_btn13.style.backgroundColor = "#fdd56a"
+        temp_btn13.style.color = 'black'
+        temp_btn13.style.border = '1px solid white';
+        temp_btn13.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="width: 550px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>Digital사업추진단</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>신용학 담당</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>신규 Digital 비즈니스 모델 발굴 - Smart LV/MV/Smart Factory 영역의 신규 비즈니스 모델 추가 발굴    Innovation Sprint 실행</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>이석찬S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:60%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q1" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q1" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q1" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q1" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q1" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q2" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q2" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q2" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q2" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q2" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q3" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q3" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q3" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q3" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q3" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q4" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q4" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q4" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q4" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q4" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q5" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q5" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q5" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q5" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q5" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q6" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q6" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q6" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q6" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q6" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:40%; float: left;">' + 
+          '<input type="radio" name="h13_q7" id="1" value="1">' + '<span style="font-weight:bold;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q7" id="2" value="2">' + '<span style="font-weight:bold;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q7" id="3" value="3">' + '<span style="font-weight:bold;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q7" id="4" value="4">' + '<span style="font-weight:bold;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h13_q7" id="5" value="5">' + '<span style="font-weight:bold;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:60%; float: left;">평가근거</div>' +
+          '<br>' +
+          '<div style="width:40%; float: left;">' + 
+          '<textarea style="width:350px; height:120px;" name="h13_write" id="story"></textarea>' +
+          '</div>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+        temp_btn6.style.backgroundColor = "#252b34"
+        temp_btn6.style.color = 'white'
+        temp_btn7.style.backgroundColor = "#252b34"
+        temp_btn7.style.color = 'white'
+        temp_btn8.style.backgroundColor = "#252b34"
+        temp_btn8.style.color = 'white'
+        temp_btn9.style.backgroundColor = "#252b34"
+        temp_btn9.style.color = 'white'
+        temp_btn10.style.backgroundColor = "#252b34"
+        temp_btn10.style.color = 'white'
+        temp_btn11.style.backgroundColor = "#252b34"
+        temp_btn11.style.color = 'white'
+        temp_btn12.style.backgroundColor = "#252b34"
+        temp_btn12.style.color = 'white'
+      } 
+    }; 
+  </script>
+  
+
+
+</body>
+
+</html>
