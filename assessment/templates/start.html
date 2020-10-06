@@ -47,6 +47,7 @@
 
     li {float:left; list-style:none; margin:1px;}
 
+ 
     a:link { color: white; text-decoration: none;}
     a:visited { color: white; text-decoration: none;}
     a:hover { color: white; text-decoration: none;}
@@ -60,8 +61,8 @@
         <div class="container">
 
         <!-- Brand -->
-        <a class="navbar-brand" href="/" target="_blank">
-            <strong class="hangul" style="color: #61dafb; font-weight: bold;">'20년 DT전략과제 수행 결과 발표회 (1차)</strong>
+        <a class="navbar-brand" href="#">
+            <strong class="hangul" style="color: #61dafb; font-weight: bold;">'20년 DT전략과제 수행 결과 발표회 (2차)</strong>
         </a>
 
         <!-- Collapse -->
@@ -74,17 +75,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/standard">평가기준</a>
+                <li class="nav-item active" style="background-color: #1f2021;">
+                    <a class="nav-link" href="/standard" target="_blank"><i style="font-size:20px; text-align:center;" class="fa fa-edit"></i>평가기준</a>
                 </li>
             </ul>
 
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons">
             <li class="nav-item">
-                <a href="https://github.com/pym7857/"
-                    target="_blank" style="color: #61dafb; font-weight:bold; font-size:150%">
-                    LS ELECTRIC
+                <a href="#" style="color: #61dafb; font-weight:bold; font-size:150%">
+                LS ELECTRIC
                 </a>
             </li>
             </ul>
@@ -96,12 +96,32 @@
 
   <!--Main layout-->
     <main>
-        <div class="container" style="width: 1000px; height: 85vh;">
+        <div class="container" style="height: 85vh;">
 
             <br><br><br><br><br>
 
-            <img src="{{url_for('static', filename='img/standard.PNG')}}" alt="">
+            <form action="/start" method="post">
+                <!-- 내가 누군지 체크 부분 -->
+                <div class="form-group" style="margin: 0 500px; border: none; width: 500px;">
+                    <p style=" font-size:30px;">평가자</p> 
+                    
+                    <hr>
 
+                    <i style="font-size:30px;" class="fa fa-exclamation-circle"></i> <p>평가 진행을 위해 <u><mark>본인 혹은 조직장</mark>을 클릭해주세요.</u></p>
+                    <br><br>
+                    <input type="radio" name="who" style="width:18px;height:16px" id="a01" value="박용상 사장"> <span style="font-weight:bold; font-size:20px;">박용상 사장</span>
+                    <br><br>
+                    <input type="radio" name="who" style="width:18px;height:16px" id="a02" value="남기원 부사장"> <span style="font-weight:bold;  font-size:20px;">남기원 부사장</span>
+                    <br><br>
+                    <input type="radio" name="who" style="width:18px;height:16px" id="a03" value="이학성 전력시험기술원장"> <span style="font-weight:bold;  font-size:20px;">이학성 전력시험기술원장</span>
+                    <br><br><br><br>
+                    <button type="submit" style="width: 190px; height: 50px; background-color: #003876; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: center; border: 1px solid white; cursor:pointer;">시작하기</button>
+                </div>
+
+            </form>
+
+            
         </div>
     </main>
 

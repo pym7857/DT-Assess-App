@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>DT임원평가 설문App</title>
+  <script type="text/javascript" src="{{url_for('static', filename='js/excel.min.js')}}"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap core CSS -->
+  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="{{url_for('static', filename='css/mdb.min.css')}}" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="{{url_for('static', filename='css/style.min.css')}}" rel="stylesheet">
+  <!-- 나눔 바른 고딕 웹 폰트 적용하기 -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
+  <style type="text/css">
+
+    html,
+    body,
+    header,
+    .carousel {
+      height: 100%;
+    }
+
+    h3 {
+      display: inline;
+    }
+
+
+    .wrap{
+     width: 1000px;
+     height: 330px;
+     overflow-x: scroll;
+     white-space:nowrap
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #1C2331!important;
+            }
+        }
+
+    .hangul {
+        font-family: 'Nanum Barun Gothic' !important;
+    }
+
+    li {float:left; list-style:none; margin:1px;}
+
+    /* skillsInfo*/
+    #skillsInfoArea {
+      margin: 0 auto;
+      width: 86%;
+      max-width: 1280px;
+      border-radius: 40px;
+      padding: 50px;
+    }
+    #skillsArea {
+      width: 50%;
+      float: left;
+      margin-right: 5%;
+    }
+    #infoArea {
+      width: 44%;
+      display: inline-block;
+    }
+    #infoArea tr {
+      height: 30px;
+    }
+    .skillProgressBarBG {
+      background: #ddd;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .skillProgressBar {
+      height: 0.8vh;
+    }
+
+  </style>
+   <script type="text/javascript">
+	  var FnObj = {
+				bodyScrollEvt: function(evt) {
+					this.scrollSkillsGraph.process();
+				},
+				scrollSkillsGraph: {
+					isFirst: true,
+					process: function() {
+						if (this.isFirst) {
+							var valueArr = [];
+							$('#skillsInfoArea').find('.skillProgressBar').each(function() {
+								valueArr.push([this, $(this).width()/$(this).parent().width()]);
+								$(this).css('width', '1px');
+							});
+							for (let i = 0; i < valueArr.length; i++) {
+								setTimeout(function() {
+									$(valueArr[i][0]).css('transition', 'width 1s ease 0.7s');
+									$(valueArr[i][0]).css('width', Math.round(valueArr[i][1]*100)+'%');
+								}, 100*(i+1));
+							}
+							this.isFirst = false;
+						}
+					}
+				}
+	  }
+  </script>
+  <script type="text/javascript">
+    
+  </script>
+
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">
+        <strong class="hangul" style="color: #61dafb; font-weight: bold;">'20년 DT전략과제 수행 결과 발표회 (2차)</strong>
+      </a>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active" style="background-color: #1f2021;">
+            <a class="nav-link" href="/standard" target="_blank"><i style="font-size:20px; text-align:center;" class="fa fa-edit"></i>평가기준</a>
+          </li>
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item">
+            <a href="#" style="color: #61dafb; font-weight:bold; font-size:150%">
+              LS ELECTRIC
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- Links -->
+    </div>
+  </nav>
+  <!-- Navbar -->
+
+
+  <!--Main layout-->
+  <main>
+    
+    <div class="container" style="height: 85vh;">
+
+        <br><br><br><br><br>
+
+        <!--Grid row-->
+        <div class="row">
+          <!--Grid column-->
+          <div class="col-md-8">
+            {% if err_msg %}
+              <p style="color: red;">{{ err_msg }}</p>
+            {% endif %}
+
+            <br>
+
+            <!-- Main heading -->
+            <h3 class="h3 mb-3" style="font-family: 'Nanum Barun Gothic'">
+              DT 전략과제 평가 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            </h3>
+            <i style="font-size:20px; text-align:center;" class="fa fa-user"></i> 평가자 조직장: {{ who }}
+
+              <hr>
+            <div id="chk_num_text">{{ chk_num_text }}</div>
+              <form action="/" method="post">
+
+                <div style="width:30%; float:left;" >
+                  <div class="form-group">
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #252b34; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn1" name="whoami"  value="조욱동 이사">
+                    <br>
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #2a303b; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn2" name="whoami" value="김정옥 이사">
+                    <br>
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #252b34; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn3" name="whoami" value="서장철 담당(DP)">
+                    <br>
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #252b34; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn4" name="whoami" value="서장철 담당(DT)">
+                    <br>
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #252b34; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: left; border: 1px solid white; cursor:pointer;" id="temp_btn5" name="whoami" value="박경록 담당">
+                    <br>
+                    <input type="button" style="width: 18vh; height: 4.5vh; background-color: #003876; color: white; font-family: 'Nanum Barun Gothic' !important;
+                      text-align: center; border: 1px solid white; cursor:pointer;" id="final_btn" value="최종 제출">
+                  </div>
+                </div>
+
+
+                <div style="width:70%; float:left;">
+                    <div class="form-group" id="temp_board">
+                      <img style="width:90%" src="{{ url_logo }}">
+                    </div>
+
+                    <br><br>
+
+                </div>
+              </form>
+
+          </div>
+          <!--Grid column-->
+
+
+          <!--Grid column-->
+          <div class="col-md-4">
+            <!-- SkiilsInfoArea -->
+              <div id="skillsInfoArea" class="contentArticle">
+                <div id="skillsArea">
+                  {% if sdict %}
+                    {% for key, value in sdict.items() %}
+                      <b>{{ key }}</b>
+                      <div class="skillProgressBarBG">
+                        <div class="skillProgressBar" style="background: black; width: {{ value }}%;"></div>
+                      </div>
+                      <div>{{ value }}</div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+          </div>
+          <!--Grid column-->
+
+
+
+      <hr class="my-5">
+
+
+    </div>
+
+  </main>
+  <!--Main layout-->
+
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+  <!-- JQuery Modal -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/jquery.modal.min.js')}}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/mdb.min.js')}}"></script>
+  <!-- Initializations -->
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+  </script>
+
+  <script type="text/javascript"> 
+    window.onload = function() { 
+      FnObj.bodyScrollEvt(this);
+
+      var final_btn = document.getElementById('final_btn');
+      final_btn.onclick = function() {
+        if (confirm("정말 제출 하시겠습니까?") == true){    //확인
+            //document.form.submit();
+            window.location.href='/end';
+        }else{   //취소
+            return;
+        }
+      }
+
+      var temp_btn1 = document.getElementById('temp_btn1');
+      var temp_btn2 = document.getElementById('temp_btn2');
+      var temp_btn3 = document.getElementById('temp_btn3');
+      var temp_btn4 = document.getElementById('temp_btn4');
+      var temp_btn5 = document.getElementById('temp_btn5');
+
+      var chk_num_text = $("#chk_num_text").text();
+      //console.log("chk_num_text = ", chk_num_text);
+
+      var chk_num_arr = Array.from(chk_num_text)
+      //console.log("chk_num_arr = ", chk_num_arr)
+
+      temp_btn1.onclick = function() { 
+
+        temp_btn1.style.backgroundColor = "#fdd56a" // 노랑
+        temp_btn1.style.color = 'black'
+        temp_btn1.style.border = '1px solid white';  // click 시 black outline 제거
+        temp_btn1.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="background-color: #f0f4fa; width: 630px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>생기/소재연구센터</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>조욱동 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.Smart Factory 단계별추진 <br> 2.Digital Technology 적용 공정혁신</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>백희선S, 김민규S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:50%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q1" onclick="calc_temp_sum_1();" id="q1_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" onclick="calc_temp_sum_1();" id="q1_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" onclick="calc_temp_sum_1();" id="q1_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" onclick="calc_temp_sum_1();" id="q1_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q1" onclick="calc_temp_sum_1();" id="q1_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q2" onclick="calc_temp_sum_1();" id="q2_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" onclick="calc_temp_sum_1();" id="q2_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" onclick="calc_temp_sum_1();" id="q2_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" onclick="calc_temp_sum_1();" id="q2_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q2" onclick="calc_temp_sum_1();" id="q2_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q3" onclick="calc_temp_sum_1();" id="q3_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" onclick="calc_temp_sum_1();" id="q3_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" onclick="calc_temp_sum_1();" id="q3_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" onclick="calc_temp_sum_1();" id="q3_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q3" onclick="calc_temp_sum_1();" id="q3_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q4" onclick="calc_temp_sum_1();" id="q4_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" onclick="calc_temp_sum_1();" id="q4_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" onclick="calc_temp_sum_1();" id="q4_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" onclick="calc_temp_sum_1();" id="q4_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q4" onclick="calc_temp_sum_1();" id="q4_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q5" onclick="calc_temp_sum_1();" id="q5_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" onclick="calc_temp_sum_1();" id="q5_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" onclick="calc_temp_sum_1();" id="q5_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" onclick="calc_temp_sum_1();" id="q5_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q5" onclick="calc_temp_sum_1();" id="q5_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q6" onclick="calc_temp_sum_1();" id="q6_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" onclick="calc_temp_sum_1();" id="q6_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" onclick="calc_temp_sum_1();" id="q6_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" onclick="calc_temp_sum_1();" id="q6_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q6" onclick="calc_temp_sum_1();" id="q6_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h1_q7" onclick="calc_temp_sum_1();" id="q7_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" onclick="calc_temp_sum_1();" id="q7_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" onclick="calc_temp_sum_1();" id="q7_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" onclick="calc_temp_sum_1();" id="q7_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h1_q7" onclick="calc_temp_sum_1();" id="q7_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<p style="float: left;">평가근거</p>' +
+          '<br><br>' +
+          '<textarea style="float: left; width:40vh; height:10vh;" name="h1_write" id="story"></textarea>' +
+
+          '<p id="middle_score" style="float: right;"></p>' +
+
+          '<br><br><br><br>' +
+
+          '<div onclick="is_all_check_1();" style="text-align: right; width:50vh; height: 30px; font-family: "Nanum Barun Gothic" !important; cursor:pointer; float: right; border: 1px solid black;" id="fake_submit_btn">페잌 저장</div>' +
+
+          '<button style="display:none; font-family: "Nanum Barun Gothic" !important; cursor:pointer;" id="submit_btn" type="submit" class="btn btn-primary btn-md pull-right"></button>'
+        );
+
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+
+        var order = 0
+
+        for(var i=1; i<=7; i++) {
+          var index = order*7
+          var temp_num = Number(chk_num_arr[index+ (i-1)]);
+          //console.log("temp_num = ", temp_num);
+
+          if(temp_num != 0) {
+            $(":radio[name='h1" + "_q" + i +"'][id='q" + i + "_" + temp_num + "']").attr('checked', true); // h1_q1, h1_q2, h1_q3...
+          }
+        }
+
+      }
+
+      temp_btn2.onclick = function() { 
+
+        temp_btn2.style.backgroundColor = "#fdd56a"
+        temp_btn2.style.color = 'black'
+        temp_btn2.style.border = '1px solid white';
+        temp_btn2.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="background-color: #f0f4fa; width: 630px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>청주사업장1공장</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>김정옥 이사</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.Smart Factory 단계별 추진 <br> 2.IoT 정보기반 모델교체 자동화로 낭비시간 개선 </td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>허종배S, 황복하S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:50%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q1" onclick="calc_temp_sum_2();" id="q1_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" onclick="calc_temp_sum_2();" id="q1_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" onclick="calc_temp_sum_2();" id="q1_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" onclick="calc_temp_sum_2();" id="q1_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q1" onclick="calc_temp_sum_2();" id="q1_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q2" onclick="calc_temp_sum_2();" id="q2_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" onclick="calc_temp_sum_2();" id="q2_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" onclick="calc_temp_sum_2();" id="q2_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" onclick="calc_temp_sum_2();" id="q2_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q2" onclick="calc_temp_sum_2();" id="q2_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q3" onclick="calc_temp_sum_2();" id="q3_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" onclick="calc_temp_sum_2();" id="q3_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" onclick="calc_temp_sum_2();" id="q3_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" onclick="calc_temp_sum_2();" id="q3_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q3" onclick="calc_temp_sum_2();" id="q3_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q4" onclick="calc_temp_sum_2();" id="q4_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" onclick="calc_temp_sum_2();" id="q4_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" onclick="calc_temp_sum_2();" id="q4_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" onclick="calc_temp_sum_2();" id="q4_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q4" onclick="calc_temp_sum_2();" id="q4_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q5" onclick="calc_temp_sum_2();" id="q5_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" onclick="calc_temp_sum_2();" id="q5_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" onclick="calc_temp_sum_2();" id="q5_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" onclick="calc_temp_sum_2();" id="q5_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q5" onclick="calc_temp_sum_2();" id="q5_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q6" onclick="calc_temp_sum_2();" id="q6_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" onclick="calc_temp_sum_2();" id="q6_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" onclick="calc_temp_sum_2();" id="q6_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" onclick="calc_temp_sum_2();" id="q6_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q6" onclick="calc_temp_sum_2();" id="q6_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h2_q7" onclick="calc_temp_sum_2();" id="q7_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" onclick="calc_temp_sum_2();" id="q7_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" onclick="calc_temp_sum_2();" id="q7_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" onclick="calc_temp_sum_2();" id="q7_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h2_q7" onclick="calc_temp_sum_2();" id="q7_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<p style="float: left;">평가근거</p>' +
+          '<br><br>' +
+          '<textarea style="float: left; width:40vh; height:10vh;" name="h2_write" id="story"></textarea>' +
+
+          '<p id="middle_score" style="float: right;"></p>' +
+
+          '<br><br><br><br>' +
+
+          '<div onclick="is_all_check_2();" style="text-align: right; width:50vh; height: 30px; font-family: "Nanum Barun Gothic" !important; cursor:pointer; float: right; border: 1px solid black;" id="fake_submit_btn">페잌 저장</div>' +
+
+          '<button style="display:none; font-family: "Nanum Barun Gothic" !important; cursor:pointer;" id="submit_btn" type="submit" class="btn btn-primary btn-md pull-right"></button>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+
+        var order = 1
+
+        for(var i=1; i<=7; i++) {
+          var index = order*7
+          var temp_num = Number(chk_num_arr[index+ (i-1)]);
+          //console.log("temp_num = ", temp_num);
+
+          if(temp_num != 0) {
+            $(":radio[name='h2" + "_q" + i +"'][id='q" + i + "_" + temp_num + "']").attr('checked', true); // h1_q1, h1_q2, h1_q3...
+          }
+        }
+      } 
+
+      temp_btn3.onclick = function() { 
+
+        temp_btn3.style.backgroundColor = "#fdd56a"
+        temp_btn3.style.color = 'black'
+        temp_btn3.style.border = '1px solid white';
+        temp_btn3.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="background-color: #f0f4fa; width: 630px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>DP연구소</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>서장철 담당(DP)</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1. [데이터 분석] 최신 Machine Learning 기법을 자사 제품에 빠르게 적용하기 위하여  유관 부서간 긴밀한 협조와 소통 및 선진 전문업체와의 적극적인 Open Innovation 추진 <br> 2. [Digital 제품] Core Platform기반으로 Device Service SW 경쟁력 확보</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>이진호 담당, 성영주S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:50%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q1" onclick="calc_temp_sum_3();" id="q1_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" onclick="calc_temp_sum_3();" id="q1_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" onclick="calc_temp_sum_3();" id="q1_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" onclick="calc_temp_sum_3();" id="q1_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q1" onclick="calc_temp_sum_3();" id="q1_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q2" onclick="calc_temp_sum_3();" id="q2_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" onclick="calc_temp_sum_3();" id="q2_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" onclick="calc_temp_sum_3();" id="q2_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" onclick="calc_temp_sum_3();" id="q2_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q2" onclick="calc_temp_sum_3();" id="q2_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q3" onclick="calc_temp_sum_3();" id="q3_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" onclick="calc_temp_sum_3();" id="q3_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" onclick="calc_temp_sum_3();" id="q3_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" onclick="calc_temp_sum_3();" id="q3_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q3" onclick="calc_temp_sum_3();" id="q3_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q4" onclick="calc_temp_sum_3();" id="q4_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" onclick="calc_temp_sum_3();" id="q4_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" onclick="calc_temp_sum_3();" id="q4_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" onclick="calc_temp_sum_3();" id="q4_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q4" onclick="calc_temp_sum_3();" id="q4_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q5" onclick="calc_temp_sum_3();" id="q5_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" onclick="calc_temp_sum_3();" id="q5_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" onclick="calc_temp_sum_3();" id="q5_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" onclick="calc_temp_sum_3();" id="q5_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q5" onclick="calc_temp_sum_3();" id="q5_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q6" onclick="calc_temp_sum_3();" id="q6_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" onclick="calc_temp_sum_3();" id="q6_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" onclick="calc_temp_sum_3();" id="q6_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" onclick="calc_temp_sum_3();" id="q6_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q6" onclick="calc_temp_sum_3();" id="q6_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h3_q7" onclick="calc_temp_sum_3();" id="q7_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" onclick="calc_temp_sum_3();" id="q7_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" onclick="calc_temp_sum_3();" id="q7_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" onclick="calc_temp_sum_3();" id="q7_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h3_q7" onclick="calc_temp_sum_3();" id="q7_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<p style="float: left;">평가근거</p>' +
+          '<br><br>' +
+          '<textarea style="float: left; width:40vh; height:10vh;" name="h3_write" id="story"></textarea>' +
+
+          '<p id="middle_score" style="float: right;"></p>' +
+
+          '<br><br><br><br>' +
+
+          '<div onclick="is_all_check_3();" style="text-align: right; width:50vh; height: 30px; font-family: "Nanum Barun Gothic" !important; cursor:pointer; float: right; border: 1px solid black;" id="fake_submit_btn">페잌 저장</div>' +
+
+          '<button style="display:none; font-family: "Nanum Barun Gothic" !important; cursor:pointer;" id="submit_btn" type="submit" class="btn btn-primary btn-md pull-right"></button>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+
+        var order = 2
+
+        for(var i=1; i<=7; i++) {
+          var index = order*7
+          var temp_num = Number(chk_num_arr[index+ (i-1)]);
+          //console.log("temp_num = ", temp_num);
+
+          if(temp_num != 0) {
+            $(":radio[name='h3" + "_q" + i +"'][id='q" + i + "_" + temp_num + "']").attr('checked', true); // h1_q1, h1_q2, h1_q3...
+          }
+        }
+      } 
+
+      temp_btn4.onclick = function() { 
+
+        temp_btn4.style.backgroundColor = "#fdd56a"
+        temp_btn4.style.color = 'black'
+        temp_btn4.style.border = '1px solid white';
+        temp_btn4.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="background-color: #f0f4fa; width: 630px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>DT추진단</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>서장철 담당(DT)</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.DT 사무국 활동 <br> 2.DT Enabler 활동(성과관리, Infra, 리더) <br> 3.디지털 경영 추진</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>송동호S, 곽형운M</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:50%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q1" onclick="calc_temp_sum_4();" id="q1_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" onclick="calc_temp_sum_4();" id="q1_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" onclick="calc_temp_sum_4();" id="q1_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" onclick="calc_temp_sum_4();" id="q1_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q1" onclick="calc_temp_sum_4();" id="q1_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q2" onclick="calc_temp_sum_4();" id="q2_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" onclick="calc_temp_sum_4();" id="q2_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" onclick="calc_temp_sum_4();" id="q2_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" onclick="calc_temp_sum_4();" id="q2_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q2" onclick="calc_temp_sum_4();" id="q2_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q3" onclick="calc_temp_sum_4();" id="q3_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" onclick="calc_temp_sum_4();" id="q3_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" onclick="calc_temp_sum_4();" id="q3_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" onclick="calc_temp_sum_4();" id="q3_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q3" onclick="calc_temp_sum_4();" id="q3_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q4" onclick="calc_temp_sum_4();" id="q4_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" onclick="calc_temp_sum_4();" id="q4_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" onclick="calc_temp_sum_4();" id="q4_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" onclick="calc_temp_sum_4();" id="q4_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q4" onclick="calc_temp_sum_4();" id="q4_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q5" onclick="calc_temp_sum_4();" id="q5_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" onclick="calc_temp_sum_4();" id="q5_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" onclick="calc_temp_sum_4();" id="q5_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" onclick="calc_temp_sum_4();" id="q5_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q5" onclick="calc_temp_sum_4();" id="q5_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q6" onclick="calc_temp_sum_4();" id="q6_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" onclick="calc_temp_sum_4();" id="q6_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" onclick="calc_temp_sum_4();" id="q6_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" onclick="calc_temp_sum_4();" id="q6_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q6" onclick="calc_temp_sum_4();" id="q6_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h4_q7" onclick="calc_temp_sum_4();" id="q7_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" onclick="calc_temp_sum_4();" id="q7_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" onclick="calc_temp_sum_4();" id="q7_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" onclick="calc_temp_sum_4();" id="q7_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h4_q7" onclick="calc_temp_sum_4();" id="q7_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<p style="float: left;">평가근거</p>' +
+          '<br><br>' +
+          '<textarea style="float: left; width:40vh; height:10vh;" name="h4_write" id="story"></textarea>' +
+
+          '<p id="middle_score" style="float: right;"></p>' +
+
+          '<br><br><br><br>' +
+
+          '<div onclick="is_all_check_4();" style="text-align: right; width:50vh; height: 30px; font-family: "Nanum Barun Gothic" !important; cursor:pointer; float: right; border: 1px solid black;" id="fake_submit_btn">페잌 저장</div>' +
+
+          '<button style="display:none; font-family: "Nanum Barun Gothic" !important; cursor:pointer;" id="submit_btn" type="submit" class="btn btn-primary btn-md pull-right"></button>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn5.style.backgroundColor = "#252b34"
+        temp_btn5.style.color = 'white'
+
+        var order = 3
+
+        for(var i=1; i<=7; i++) {
+          var index = order*7
+          var temp_num = Number(chk_num_arr[index+ (i-1)]);
+          //console.log("temp_num = ", temp_num);
+
+          if(temp_num != 0) {
+            $(":radio[name='h4" + "_q" + i +"'][id='q" + i + "_" + temp_num + "']").attr('checked', true); // h1_q1, h1_q2, h1_q3...
+          }
+        }
+      } 
+
+      temp_btn5.onclick = function() { 
+
+        temp_btn5.style.backgroundColor = "#fdd56a"
+        temp_btn5.style.color = 'black'
+        temp_btn5.style.border = '1px solid white';
+        temp_btn5.style.outline = 'none';
+
+        $('#temp_board').empty()
+        $('#temp_board').append(
+          '<table style="background-color: #f0f4fa; width: 630px; border: none;">' + 
+          '<tr>' + 
+          '<td style="color: #003876;">조직명</td>' + 
+          '<td>천안사업장</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="width: 200px; color:#003876;">조직장</td>' + 
+          '<td>박경록 담당</td>' +
+          '</tr>' +
+          '<tr>' + 
+          '<td style="color: #003876;">과제</td>' + 
+          '<td>1.M/L기반 FCST 시스템 적용 일정 <br> 2.인버터 조립시간 절감</td>' + 
+          '</tr>' + 
+          '<tr>' + 
+          '<td style="color: #003876;">담당자</td>' + 
+          '<td>정환S, 나성규S</td>' +
+          '</tr>' +
+          '</table>' +
+
+          '<br>' +
+
+          '<div style="width:50%; float: left;">DT Vision과의 연관성(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q1" onclick="calc_temp_sum_5();" id="q1_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" onclick="calc_temp_sum_5();" id="q1_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" onclick="calc_temp_sum_5();" id="q1_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" onclick="calc_temp_sum_5();" id="q1_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q1" onclick="calc_temp_sum_5();" id="q1_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>' + 
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">실행력을 확보한 과제 정의(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q2" onclick="calc_temp_sum_5();" id="q2_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" onclick="calc_temp_sum_5();" id="q2_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" onclick="calc_temp_sum_5();" id="q2_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" onclick="calc_temp_sum_5();" id="q2_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q2" onclick="calc_temp_sum_5();" id="q2_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>'+
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">분석 과정의 논리성(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q3" onclick="calc_temp_sum_5();" id="q3_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" onclick="calc_temp_sum_5();" id="q3_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" onclick="calc_temp_sum_5();" id="q3_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" onclick="calc_temp_sum_5();" id="q3_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q3" onclick="calc_temp_sum_5();" id="q3_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">디지털 신기술 기반 가치 창출(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q4" onclick="calc_temp_sum_5();" id="q4_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" onclick="calc_temp_sum_5();" id="q4_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" onclick="calc_temp_sum_5();" id="q4_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" onclick="calc_temp_sum_5();" id="q4_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q4" onclick="calc_temp_sum_5();" id="q4_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">전문가 의견, 외부 사례 활용(10)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q5" onclick="calc_temp_sum_5();" id="q5_1"  value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" onclick="calc_temp_sum_5();" id="q5_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" onclick="calc_temp_sum_5();" id="q5_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" onclick="calc_temp_sum_5();" id="q5_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q5" onclick="calc_temp_sum_5();" id="q5_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">과제 추진 난이도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q6" onclick="calc_temp_sum_5();" id="q6_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" onclick="calc_temp_sum_5();" id="q6_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" onclick="calc_temp_sum_5();" id="q6_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" onclick="calc_temp_sum_5();" id="q6_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q6" onclick="calc_temp_sum_5();" id="q6_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<div style="width:50%; float: left;">KPI 달성도 및 개선도(20)</div>' + 
+          '<div style="width:50%; float: left;">' + 
+          '<input type="radio" name="h5_q7" onclick="calc_temp_sum_5();" id="q7_1" value="1" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 1' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" onclick="calc_temp_sum_5();" id="q7_2" value="2" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 2' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" onclick="calc_temp_sum_5();" id="q7_3" value="3" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 3' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" onclick="calc_temp_sum_5();" id="q7_4" value="4" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 4' + '</span>'+
+          '&nbsp&nbsp&nbsp&nbsp'+
+          '<input type="radio" name="h5_q7" onclick="calc_temp_sum_5();" id="q7_5" value="5" style="width:25px; height:25px; border:1px;">' + '<span style="font-weight:bold; font-size:20px;">' + ' 5' + '</span>'+
+          '</div>' +
+
+          '<br><hr>' +
+
+          '<p style="float: left;">평가근거</p>' +
+          '<br><br>' +
+          '<textarea style="float: left; width:40vh; height:10vh;" name="h5_write" id="story"></textarea>' +
+
+          '<p id="middle_score" style="float: right;"></p>' +
+
+          '<br><br><br><br>' +
+
+          '<div onclick="is_all_check_5();" style="text-align: right; width:50vh; height: 30px; font-family: "Nanum Barun Gothic" !important; cursor:pointer; float: right; border: 1px solid black;" id="fake_submit_btn">페잌 저장</div>' +
+
+          '<button style="display:none; font-family: "Nanum Barun Gothic" !important; cursor:pointer;" id="submit_btn" type="submit" class="btn btn-primary btn-md pull-right"></button>'
+        );
+
+        temp_btn1.style.backgroundColor = "#252b34"
+        temp_btn1.style.color = 'white'
+        temp_btn2.style.backgroundColor = "#252b34"
+        temp_btn2.style.color = 'white'
+        temp_btn3.style.backgroundColor = "#252b34"
+        temp_btn3.style.color = 'white'
+        temp_btn4.style.backgroundColor = "#252b34"
+        temp_btn4.style.color = 'white'
+
+        var order = 4
+
+        for(var i=1; i<=7; i++) {
+          var index = order*7
+          var temp_num = Number(chk_num_arr[index+ (i-1)]);
+          //console.log("temp_num = ", temp_num);
+
+          if(temp_num != 0) {
+            $(":radio[name='h5" + "_q" + i +"'][id='q" + i + "_" + temp_num + "']").attr('checked', true); // h1_q1, h1_q2, h1_q3...
+          }
+        }
+      } 
+
+    }; 
+  </script>
+
+  <script type="text/javascript"> 
+    function is_all_check_1() {
+      if(!$("input[name='h1_q1']:checked").val() || !$("input[name='h1_q2']:checked").val() || !$("input[name='h1_q3']:checked").val() || !$("input[name='h1_q4']:checked").val()
+      || !$("input[name='h1_q5']:checked").val() || !$("input[name='h1_q6']:checked").val() || !$("input[name='h1_q7']:checked").val()){
+        alert('7개 문항에 모두 체크해주시기 바랍니다.');
+        return;
+      } 
+      else {
+        $('#submit_btn').trigger('click');
+      }
+    }
+    function is_all_check_2() {
+      if(!$("input[name='h2_q1']:checked").val() || !$("input[name='h2_q2']:checked").val() || !$("input[name='h2_q3']:checked").val() || !$("input[name='h2_q4']:checked").val()
+      || !$("input[name='h2_q5']:checked").val() || !$("input[name='h2_q6']:checked").val() || !$("input[name='h2_q7']:checked").val()){
+        alert('7개 문항에 모두 체크해주시기 바랍니다.');
+        return;
+      } 
+      else {
+        $('#submit_btn').trigger('click');
+      }
+    }
+    function is_all_check_3() {
+      if(!$("input[name='h3_q1']:checked").val() || !$("input[name='h3_q2']:checked").val() || !$("input[name='h3_q3']:checked").val() || !$("input[name='h3_q4']:checked").val()
+      || !$("input[name='h3_q5']:checked").val() || !$("input[name='h3_q6']:checked").val() || !$("input[name='h3_q7']:checked").val()){
+        alert('7개 문항에 모두 체크해주시기 바랍니다.');
+        return;
+      } 
+      else {
+        $('#submit_btn').trigger('click');
+      }
+    }
+    function is_all_check_4() {
+      if(!$("input[name='h4_q1']:checked").val() || !$("input[name='h4_q2']:checked").val() || !$("input[name='h4_q3']:checked").val() || !$("input[name='h4_q4']:checked").val()
+      || !$("input[name='h4_q5']:checked").val() || !$("input[name='h4_q6']:checked").val() || !$("input[name='h4_q7']:checked").val()){
+        alert('7개 문항에 모두 체크해주시기 바랍니다.');
+        return;
+      } 
+      else {
+        $('#submit_btn').trigger('click');
+      }
+    }
+    function is_all_check_5() {
+      if(!$("input[name='h5_q1']:checked").val() || !$("input[name='h5_q2']:checked").val() || !$("input[name='h5_q3']:checked").val() || !$("input[name='h5_q4']:checked").val()
+      || !$("input[name='h5_q5']:checked").val() || !$("input[name='h5_q6']:checked").val() || !$("input[name='h5_q7']:checked").val()){
+        alert('7개 문항에 모두 체크해주시기 바랍니다.');
+        return;
+      } 
+      else {
+        $('#submit_btn').trigger('click');
+      }
+    }
+
+    function calc_temp_sum_1() {
+      var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+      if(Number($("input[name='h1_q1']:checked").val())) {
+        t1 = Number($("input[name='h1_q1']:checked").val())
+      } 
+      if(Number($("input[name='h1_q2']:checked").val())) {
+        t2 = Number($("input[name='h1_q2']:checked").val())
+      }
+      if(Number($("input[name='h1_q3']:checked").val())) {
+        t3 = Number($("input[name='h1_q3']:checked").val())
+      }
+      if(Number($("input[name='h1_q4']:checked").val())) {
+        t4 = Number($("input[name='h1_q4']:checked").val())
+      }
+      if(Number($("input[name='h1_q5']:checked").val())) {
+        t5 = Number($("input[name='h1_q5']:checked").val())
+      }
+      if(Number($("input[name='h1_q6']:checked").val())) {
+        t6 = Number($("input[name='h1_q6']:checked").val())
+      }
+      if(Number($("input[name='h1_q7']:checked").val())) {
+        t7 = Number($("input[name='h1_q7']:checked").val())
+      }
+      var temp_sum = t1*4 + t2*2 + t3*2 + t4*2 + t5*2 + t6*4 + t7*4;
+      document.getElementById("middle_score").innerText = temp_sum;
+    }
+    function calc_temp_sum_2() {
+      var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+      if(Number($("input[name='h2_q1']:checked").val())) {
+        t1 = Number($("input[name='h2_q1']:checked").val())
+      } 
+      if(Number($("input[name='h2_q2']:checked").val())) {
+        t2 = Number($("input[name='h2_q2']:checked").val())
+      }
+      if(Number($("input[name='h2_q3']:checked").val())) {
+        t3 = Number($("input[name='h2_q3']:checked").val())
+      }
+      if(Number($("input[name='h2_q4']:checked").val())) {
+        t4 = Number($("input[name='h2_q4']:checked").val())
+      }
+      if(Number($("input[name='h2_q5']:checked").val())) {
+        t5 = Number($("input[name='h2_q5']:checked").val())
+      }
+      if(Number($("input[name='h2_q6']:checked").val())) {
+        t6 = Number($("input[name='h2_q6']:checked").val())
+      }
+      if(Number($("input[name='h2_q7']:checked").val())) {
+        t7 = Number($("input[name='h2_q7']:checked").val())
+      }
+      var temp_sum = t1*4 + t2*2 + t3*2 + t4*2 + t5*2 + t6*4 + t7*4;
+      document.getElementById("middle_score").innerText = temp_sum;
+    }
+    function calc_temp_sum_3() {
+      var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+      if(Number($("input[name='h3_q1']:checked").val())) {
+        t1 = Number($("input[name='h3_q1']:checked").val())
+      } 
+      if(Number($("input[name='h3_q2']:checked").val())) {
+        t2 = Number($("input[name='h3_q2']:checked").val())
+      }
+      if(Number($("input[name='h3_q3']:checked").val())) {
+        t3 = Number($("input[name='h3_q3']:checked").val())
+      }
+      if(Number($("input[name='h3_q4']:checked").val())) {
+        t4 = Number($("input[name='h3_q4']:checked").val())
+      }
+      if(Number($("input[name='h3_q5']:checked").val())) {
+        t5 = Number($("input[name='h3_q5']:checked").val())
+      }
+      if(Number($("input[name='h3_q6']:checked").val())) {
+        t6 = Number($("input[name='h3_q6']:checked").val())
+      }
+      if(Number($("input[name='h3_q7']:checked").val())) {
+        t7 = Number($("input[name='h3_q7']:checked").val())
+      }
+      var temp_sum = t1*4 + t2*2 + t3*2 + t4*2 + t5*2 + t6*4 + t7*4;
+      document.getElementById("middle_score").innerText = temp_sum;
+    }
+    function calc_temp_sum_4() {
+      var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+      if(Number($("input[name='h4_q1']:checked").val())) {
+        t1 = Number($("input[name='h4_q1']:checked").val())
+      } 
+      if(Number($("input[name='h4_q2']:checked").val())) {
+        t2 = Number($("input[name='h4_q2']:checked").val())
+      }
+      if(Number($("input[name='h4_q3']:checked").val())) {
+        t3 = Number($("input[name='h4_q3']:checked").val())
+      }
+      if(Number($("input[name='h4_q4']:checked").val())) {
+        t4 = Number($("input[name='h4_q4']:checked").val())
+      }
+      if(Number($("input[name='h4_q5']:checked").val())) {
+        t5 = Number($("input[name='h4_q5']:checked").val())
+      }
+      if(Number($("input[name='h4_q6']:checked").val())) {
+        t6 = Number($("input[name='h4_q6']:checked").val())
+      }
+      if(Number($("input[name='h4_q7']:checked").val())) {
+        t7 = Number($("input[name='h4_q7']:checked").val())
+      }
+      var temp_sum = t1*4 + t2*2 + t3*2 + t4*2 + t5*2 + t6*4 + t7*4;
+      document.getElementById("middle_score").innerText = temp_sum;
+    }
+    function calc_temp_sum_5() {
+      var t1 = 0; var t2 = 0; var t3 = 0; var t4 = 0; var t5 = 0; var t6 = 0; var t7 = 0;
+      if(Number($("input[name='h5_q1']:checked").val())) {
+        t1 = Number($("input[name='h5_q1']:checked").val())
+      } 
+      if(Number($("input[name='h5_q2']:checked").val())) {
+        t2 = Number($("input[name='h5_q2']:checked").val())
+      }
+      if(Number($("input[name='h5_q3']:checked").val())) {
+        t3 = Number($("input[name='h5_q3']:checked").val())
+      }
+      if(Number($("input[name='h5_q4']:checked").val())) {
+        t4 = Number($("input[name='h5_q4']:checked").val())
+      }
+      if(Number($("input[name='h5_q5']:checked").val())) {
+        t5 = Number($("input[name='h5_q5']:checked").val())
+      }
+      if(Number($("input[name='h5_q6']:checked").val())) {
+        t6 = Number($("input[name='h5_q6']:checked").val())
+      }
+      if(Number($("input[name='h5_q7']:checked").val())) {
+        t7 = Number($("input[name='h5_q7']:checked").val())
+      }
+      var temp_sum = t1*4 + t2*2 + t3*2 + t4*2 + t5*2 + t6*4 + t7*4;
+      document.getElementById("middle_score").innerText = temp_sum;
+    }
+  </script>
+  
+
+
+</body>
+
+</html>
